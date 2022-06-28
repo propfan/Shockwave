@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jun 25 18:51:36 2022
-
-@author: pedro
-"""
 import numpy as np
 from scipy.optimize import fsolve
 
@@ -32,10 +26,10 @@ def cp_TtT(T,Tt):
 
 #Variables iniciales
 #p0=rho0*R*T0
-M1=10
+M1=3
 p1=1e5
-T1=1300
-beta1=np.radians(10)
+T1=400
+beta1=np.radians(30)
 
 R=8.31451
 #Propiedades del gas
@@ -67,6 +61,9 @@ T2_s=fsolve(func_T2, T2_initial_guess)
 u2n=(2*cp_TtT(T2_s, Tt_s))**0.5
 u2=(u2n**2+w1**2)**0.5
 
+Theta_rad=beta1-np.arcsin(u2n/u2)
+Theta_deg=np.degrees(Theta_rad)
+
 #Saltos
 T21=T2_s/T1
 u21n=u2n/u1n
@@ -86,6 +83,8 @@ print('M1',M1)
 print('M1n',M1n)
 print('M2',M2)
 print('M2n',M2n)
+
+print('Theta_deg',Theta_deg)
 
 print('Jump results')
 print('Jump T21',T21)
