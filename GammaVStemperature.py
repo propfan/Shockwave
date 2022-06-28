@@ -236,38 +236,42 @@ T_1000 = np.linspace(200, 999, 500)
 Tp1000 = np.linspace(1000, 5999, 1000)
 Tp6000 = np.linspace(6000, 20000, 1000)
 
+
 #Plot resultados
-plt.plot(T_1000,Gamma_realN2_1000(T_1000), color='red',linestyle='--', label="N2")
-plt.plot(Tp1000,Gamma_realN2p1000(Tp1000), color='red',linestyle='--')
-plt.plot(Tp6000,Gamma_realN2p6000(Tp6000), color='red',linestyle='--')
 
-plt.plot(T_1000,gammav(Thetav(T_1000,TvN2),0), color='blue',linestyle='--')
-plt.plot(Tp1000,gammav(Thetav(Tp1000,TvN2),0), color='blue',linestyle='--')
-plt.plot(Tp6000,gammav(Thetav(Tp6000,TvN2),0), color='blue',linestyle='--')
+plt.plot(T_1000,Gamma_realAir_1000(T_1000), color='green',linestyle='-', label="Air")
+plt.plot(Tp1000,Gamma_realAirp1000(Tp1000), color='green',linestyle='-')
 
-plt.plot(T_1000,gammav(Thetav(T_1000,TvN2),1),color='black',linestyle='--')
-plt.plot(Tp1000,gammav(Thetav(Tp1000,TvN2),1),color='black',linestyle='--')
-plt.plot(Tp6000,gammav(Thetav(Tp6000,TvN2),1),color='black',linestyle='--')
+plt.plot(T_1000,Gamma_realH2_1000(T_1000), color='black',linestyle='dashdot', label="H\u2082")
+plt.plot(Tp1000,Gamma_realH2p1000(Tp1000), color='black',linestyle='dashdot')
+plt.plot(Tp6000,Gamma_realH2p6000(Tp6000), color='black',linestyle='dashdot')
 
-plt.plot(T_1000,Gamma_realO2_1000(T_1000), color='red',linestyle=':', label="O2")
+plt.plot(T_1000,Gamma_realO2_1000(T_1000), color='red',linestyle=':', label="O\u2082")
 plt.plot(Tp1000,Gamma_realO2p1000(Tp1000), color='red',linestyle=':')
 plt.plot(Tp6000,Gamma_realO2p6000(Tp6000), color='red',linestyle=':')
 
-plt.plot(T_1000,gammav(Thetav(T_1000,TvO2),1),color='black')
+plt.plot(T_1000,Gamma_realN2_1000(T_1000), color='blue',linestyle='--', label="N\u2082")
+plt.plot(Tp1000,Gamma_realN2p1000(Tp1000), color='blue',linestyle='--')
+plt.plot(Tp6000,Gamma_realN2p6000(Tp6000), color='blue',linestyle='--')
+
+"""
+plt.plot(T_1000,gammav(Thetav(T_1000,TvN2),0), color='blue',linestyle='--', label="\u03B4=0")
+plt.plot(Tp1000,gammav(Thetav(Tp1000,TvN2),0), color='blue',linestyle='--')
+plt.plot(Tp6000,gammav(Thetav(Tp6000,TvN2),0), color='blue',linestyle='--')
+
+plt.plot(T_1000,gammav(Thetav(T_1000,TvN2),1),color='black',linestyle='--', label="\u03B4=1 for N\u2082")
+plt.plot(Tp1000,gammav(Thetav(Tp1000,TvN2),1),color='black',linestyle='--')
+plt.plot(Tp6000,gammav(Thetav(Tp6000,TvN2),1),color='black',linestyle='--')
+
+plt.plot(T_1000,gammav(Thetav(T_1000,TvO2),1),color='black', label="\u03B4=1 for O\u2082")
 plt.plot(Tp1000,gammav(Thetav(Tp1000,TvO2),1),color='black')
 plt.plot(Tp6000,gammav(Thetav(Tp6000,TvO2),1),color='black')
-
-plt.plot(T_1000,Gamma_realH2_1000(T_1000), color='red',linestyle='dashdot', label="H2")
-plt.plot(Tp1000,Gamma_realH2p1000(Tp1000), color='red',linestyle='dashdot')
-plt.plot(Tp6000,Gamma_realH2p6000(Tp6000), color='red',linestyle='dashdot')
-
-plt.plot(T_1000,Gamma_realAir_1000(T_1000), color='magenta',linestyle='dotted', label="Air")
-plt.plot(Tp1000,Gamma_realAirp1000(Tp1000), color='magenta',linestyle='dotted')
+"""
 
 plt.grid(color='grey', linestyle='--', linewidth=0.5)
 plt.xlabel('T [K]')
 plt.ylabel('\u03B3 [-]')
-plt.legend(ncol=3)
+plt.legend(ncol=4)
 
 plt.xticks(ticks=[600,2000,4000,7000,9000,16000,20000], labels=[600,2000,4000,7000,9000,16000,20000])
 plt.show()
