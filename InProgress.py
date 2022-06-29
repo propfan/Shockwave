@@ -24,17 +24,32 @@ def Gamma(T):
     gammaT=(1-Rg/cp)**-1
     return gammaT
 
+def cp(T):
+     #Def para N2
+    Mm=28.013/1000
+   
+    R=8.31451
+    Rg=R/Mm
+    if np.where((T >= 200) & (T<=1000)):
+        cp=Rg*(a[0,0]*T**-2+a[0,1]*T**-1+a[0,2]+a[0,3]*T+a[0,4]*T**2+a[0,5]*T**3+a[0,6]*T**4)
+    elif np.where((T > 1000) & (T<=6000)):
+        cp=Rg*(a[1,0]*T**-2+a[1,1]*T**-1+a[1,2]+a[1,3]*T+a[1,4]*T**2+a[1,5]*T**3+a[1,6]*T**4)
+    elif np.where((T > 6000) & (T<=20000)):
+        cp=Rg*(a[2,0]*T**-2+a[2,1]*T**-1+a[2,2]+a[2,3]*T+a[2,4]*T**2+a[2,5]*T**3+a[2,6]*T**4)
+    return cp
+
+
 def cp_TtT(T,Tt):
      #Def para N2
     Mm=28.013/1000
     
     R=8.31451
     Rg=R/Mm
-    if(Tt>= 200) & (Tt<=1000):
+    if np.where((Tt >= 200) & (Tt<=1000)):
         AA=2*Rg*(-a[0,0]*(1/Tt-1/T)+a[0,1]*np.log(Tt/T)+a[0,2]*(Tt-T)+a[0,3]*(1/2)*(Tt**2-T**2)+a[0,4]*(1/3)*(Tt**3-T**3)+a[0,5]*(1/4)*(Tt**4-T**4)+a[0,6]*(1/5)*(Tt**5-T**5))    
-    elif (Tt> 1000) & (Tt<=6000):
+    elif np.where((Tt > 1000) & (Tt<=6000)):
         AA=2*Rg*(-a[1,0]*(1/Tt-1/T)+a[1,1]*np.log(Tt/T)+a[1,2]*(Tt-T)+a[1,3]*(1/2)*(Tt**2-T**2)+a[1,4]*(1/3)*(Tt**3-T**3)+a[1,5]*(1/4)*(Tt**4-T**4)+a[1,6]*(1/5)*(Tt**5-T**5))    
-    elif (Tt> 6000) & (Tt<=20000):
+    elif np.where((Tt > 6000) & (Tt<=20000)):
         AA=2*Rg*(-a[2,0]*(1/Tt-1/T)+a[2,1]*np.log(Tt/T)+a[2,2]*(Tt-T)+a[2,3]*(1/2)*(Tt**2-T**2)+a[2,4]*(1/3)*(Tt**3-T**3)+a[2,5]*(1/4)*(Tt**4-T**4)+a[2,6]*(1/5)*(Tt**5-T**5))    
     return AA
 
@@ -62,7 +77,7 @@ def funShock_imperfect(M, beta1, T1 ,p1):
     
     #Resolución T2 & u2n
     func_T2 = lambda T2 : -Rg*T1/u1n-u1n+Rg*T2/(cp_TtT(T2,Tt_s)-w1**2)**0.5+(cp_TtT(T2,Tt_s)-w1**2)**0.5
-    T2_initial_guess= ((7*M1n**2-1)*(M1n**2+5)/(36*M1n**2))*T1
+    T2_initial_guess= T1*((-1+7*M1n**2)*(5+M1n**2))/(36*M1n**2)*0.98 #T1*(1+2*(gamma1-1)*(M1n**2-1)/(gamma1+1)) #((2*gamma1*M1n**2-(gamma1-1))*(2+M1n**2*(gamma1-1))/((gamma1+1)**2*M1n**2))*T1 #00 #2*gamma1*u1n**2*cp(T1)/(gamma1+1)**2
     (T2_s)=fsolve(func_T2, T2_initial_guess)
     
     
@@ -89,7 +104,7 @@ def funShock_perfect(M, b):
     return P, Theta_deg
 
 #INPUTS
-M1=3.5
+M1=4
 T1=300
 p1=1e5
 
