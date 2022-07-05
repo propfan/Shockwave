@@ -1,0 +1,88 @@
+import numpy as np
+from scipy.optimize import fsolve
+from matplotlib import pyplot as plt
+
+def f(variables):
+    (P, R, T, A)= variables
+    f1 = -P+(1 + A)*R*T 
+    f2 = -P + 1+(5/3)*(1-1/R)*M1**2 
+    f3 = -T+(4-1/R-2*A*Theta_ion)/((4-R)*(1+A))
+    f4 = -A**2/(1-A)+Bi*T**(3/2)*np.exp(-Theta_ion/T)/R
+    return [f1,f2,f3,f4]
+
+#Inputs
+T1=300 
+p1=666
+
+#Constant
+R_cte=8.31451           #Ideal gas constant[J/molK]
+kb= 1.380648E-23        #Boltzmann constant[J/K]
+kv_ev=8.617333262E-5    #Boltzmann constant[eV/K]
+h = 1.05457E-34         #Planck constant[J/s]
+me=9.1093837E-31        #Electron mass [kg]
+#Aproximacion - Stability of ionizing shock waves in monatomic gases-
+Gi=1E-10                
+
+Pjump_ion=[]
+Tjump_ion=[]
+Rjump_ion=[]
+alpha_ion=[]
+
+Pjump_perf=[]
+Tjump_perf=[]
+Rjump_perf=[]
+alpha_perf=[]
+
+M1_in=[]
+
+for M1 in np.arange(14,35, 1):
+    #Propiedades del gas monoatómico
+    #Ar
+    Mm=0.03995
+    Ii=15.7596
+    
+    Rg=R_cte/Mm
+    g=5/3
+    g1=5/3
+    a1=(Rg*g1*T1)**0.5
+    
+    Ti=Ii/kv_ev
+    #Non-dimension T
+    Theta_ion=Ti/T1
+    
+    Bi=857.56 #Gi*(me/(2*np.pi*h**2))**(3/2)*(kb*T1)**(5/2)/p1
+    
+    #if M<10: #A=0.02   M=20 - A=0.4
+    (Pjump,Rjump, Tjump, alpha)=fsolve(f, ((7*M1**2-1)/(6), 9, 50,0.2))
+    
+    #Gas monoatomico ionizado
+    g2=5/3
+    M2=M1/(Rjump*g2)
+    
+    M1_in=np.append(M1_in,M1)
+    Tjump_ion=np.append(Tjump_ion,Tjump)
+    Rjump_ion=np.append(Rjump_ion,Rjump)
+    alpha_ion=np.append(alpha_ion,alpha)
+    Pjump_ion=np.append(Pjump_ion,Pjump)
+    
+    Tjump_perf=np.append(Tjump_perf,(2*g*M1**2-(g-1))*(2+(g-1)*M1**2)/((g+1)**2*M1**2))
+    Rjump_perf=np.append(Rjump_perf,(g+1)*M1**2/((g-1)*M1**2+2))
+    Pjump_perf=np.append(Pjump_perf,(2*g*M1**2-(g-1))/(g+1))
+
+
+plt.plot(M1_in,Tjump_ion, color='blue', label="Ar ion") 
+plt.plot(M1_in,Tjump_perf, color='orange',label="Ar perfecto")
+
+#plt.plot(M1_in,Rjump_ion, color='blue', label="Ar ion") 
+#plt.plot(M1_in,Rjump_perf, color='orange',label="Ar perfecto")
+
+#plt.plot(M1_in,Pjump_ion, color='blue', label="Ar ion") 
+#plt.plot(M1_in,Pjump_perf, color='orange',label="Ar perfecto")
+
+#plt.plot(M1_in,alpha_ion)
+
+plt.grid(color='grey', linestyle='--', linewidth=0.5)
+plt.xlabel('M1 [-]')
+plt.ylabel('Salto T [-]') #para alpha \u03B1  rho \u03C1
+plt.legend(ncol=3)
+plt.show()
