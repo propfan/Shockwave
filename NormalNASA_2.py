@@ -61,7 +61,8 @@ def funShock_perfect(M):
     P=(7*M**2-1)/6
     T=(7*M**2-1)*(5+M**2)/(36*M**2)
     R=(6*M**2)/(M**2+5)
-    return P, T, R
+    M2=((M1**2+5)/(7*M**2-1))**0.5
+    return P, T, R, M2
 
 #INPUTS
 T1=300
@@ -69,7 +70,8 @@ p1=1e5
 #Definición para N2
 Mm=28.013/1000
 
-
+M2nasa=[]
+gnasa=[]
 Pjump_d0=[]
 Tjump_d0=[]
 Rjump_d0=[]
@@ -77,7 +79,7 @@ Pjump=[]
 Tjump=[]
 Rjump=[]
 M1_in=[]
-for M1 in np.arange(2,15,0.1):   
+for M1 in np.arange(2,10,0.1):   
     gamma1=Gamma(T1)
     
     R=8.31451
@@ -105,8 +107,7 @@ for M1 in np.arange(2,15,0.1):
     rho21=u1/u2
     T21=T2_s/T1
     
-    (p_21_d0,T_21_d0,rho_21_d0)=funShock_perfect(M1)
-    
+    (p_21_d0,T_21_d0,rho_21_d0,M2_d0)=funShock_perfect(M1)
     
     M1_in=np.append(M1_in,M1)
                                   
@@ -117,7 +118,10 @@ for M1 in np.arange(2,15,0.1):
     Tjump=np.append(Tjump,T21)
     Rjump=np.append(Rjump,rho21)
     
-
+    gnasa=np.append(gnasa,gamma1)
+    M2nasa=np.append(M2nasa,M2)
+    
+"""
 #plt.plot(M1_in,Pjump_d0, color='blue', label="N\u2082 perfecto") 
 #plt.plot(M1_in,Pjump, color='orange',label="N\u2082 NASA")
 
@@ -126,9 +130,16 @@ for M1 in np.arange(2,15,0.1):
 
 plt.plot(M1_in,Tjump_d0, color='blue', label="N\u2082 perfecto") 
 plt.plot(M1_in,Tjump, color='orange',label="N\u2082 NASA")
+"""
+plt.plot(M1_in,Pjump/Pjump_d0, color='black', label="p jump") 
+plt.plot(M1_in,Rjump/Rjump_d0, color='blue', label="\u03C1 jump") 
+plt.plot(M1_in,Tjump/Tjump_d0, color='green', label="T jump") 
+plt.plot(M1_in,gnasa/1.4, color='cyan',linestyle='--', label="\u03B3") 
+plt.plot(M1_in,M2nasa/M2_d0, color='red',linestyle=':', label="M\u2082") 
 
 plt.grid(color='grey', linestyle='--', linewidth=0.5)
 plt.xlabel('M1 [-]')
-plt.ylabel('Salto T [-]') #para alpha \u03B1  rho \u03C1
+plt.ylabel('NASA imperfecto/gas perfecto') #para alpha \u03B1  rho \u03C1
+plt.yticks(ticks=[0,1,3,5,7,9,11], labels=[0,1,3,5,7,9,11])
 plt.legend(ncol=3)
 plt.show()
