@@ -4,8 +4,7 @@ from scipy.optimize import fsolve
 
 #Variables iniciales
 #p0=rho0*R*T0
-p1=1e5
-T1=300
+T1=1500
 
 #Polynomial from NASA 200-20000 K
 #Values for N2
@@ -120,13 +119,13 @@ p21_s_d0= []
 T21_s= []
 R21_s= []
 p21_s= []
-for M1 in np.arange(1.5,50, 0.1):   
+for M1 in np.arange(1.5,10, 0.1):   
     T21_d0,R21_d0,p21_d0,T21,R21,p21=Oscillator_NormalShock (M1,T1)
     
     M1_in = np.append(M1_in,M1)
-    T21_s_d0= np.append(T21_s,T21)
-    R21_s_d0= np.append(R21_s,R21)
-    p21_s_d0= np.append(p21_s,p21)
+    T21_s_d0= np.append(T21_s_d0,T21_d0)
+    R21_s_d0= np.append(R21_s_d0,R21_d0)
+    p21_s_d0= np.append(p21_s_d0,p21_d0)
     T21_s= np.append(T21_s,T21)
     R21_s= np.append(R21_s,R21)
     p21_s= np.append(p21_s,p21)
@@ -134,8 +133,8 @@ for M1 in np.arange(1.5,50, 0.1):
 #Plot
 plt.plot(M1_in,T21_s, color='green', label="Salto T")
 plt.plot(M1_in,T21_s_d0, color='green', linestyle='--', label="Salto T para d0")
-plt.plot(M1_in,R21_s,color='blue', label="Salto \u03C1")
-plt.plot(M1_in,R21_s_d0,color='blue', linestyle='--', label="Salto \u03C1 para d0")
+plt.plot(M1_in,R21_s,color='blue', linewidth=0.5, label="Salto \u03C1")
+plt.plot(M1_in,R21_s_d0,color='blue', linewidth=0.5, linestyle='--', label="Salto \u03C1 para d0")
 plt.plot(M1_in,p21_s, color='black', label="Salto p")
 plt.plot(M1_in,p21_s_d0, color='black', linestyle='--', label="Salto p para d0")
 
