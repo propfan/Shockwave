@@ -3,10 +3,10 @@ from scipy.optimize import fsolve
 
 #Variables iniciales
 #p0=rho0*R*T0
-M1=4
+M1=3
 p1=1e5
 T1=300
-beta1=np.deg2rad(48.28)
+beta1=np.deg2rad(37.8)
 
 #Polynomial from NASA 200-20000 K
 #Values for N2
@@ -57,11 +57,11 @@ Tt_initial_guess = (1+M1n**2*(g1-1)*0.5)*T1
 Tt_s=fsolve(func_ht, Tt_initial_guess)
 
 #Resolución T2
-func_T2= lambda T2 : -Rg*T1/u1-u1+Rg*T2/(2*cp_TtT(T2,Tt_s,Mm))**0.5+(2*cp_TtT(T2,Tt_s,Mm))**0.5
-T2_initial_guess = Tt_s*0.99999
+func_T2= lambda T2 : -Rg*T1/u1n-u1n+Rg*T2/(2*cp_TtT(T2,Tt_s,Mm)-w1**2)**0.5+(2*cp_TtT(T2,Tt_s,Mm)-w1**2)**0.5
+T2_initial_guess = Tt_s*0.55
 T2_s=fsolve(func_T2, T2_initial_guess)
 
-u2n=(2*cp_TtT(T2_s, Tt_s,Mm))**0.5
+u2n=(2*cp_TtT(T2_s, Tt_s,Mm)-w1**2)**0.5
 u2=(u2n**2+w1**2)**0.5
 
 Theta_rad=beta1-np.arcsin(u2n/u2)
