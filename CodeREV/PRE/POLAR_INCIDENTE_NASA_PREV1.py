@@ -86,6 +86,49 @@ def funShockI(T1,M1, beta):
 
     return p21, Theta_2deg
 
+#DefiniciónPunto2
+def funPoint2(T1,M1, beta1):
+    #Velocidad Tangencial
+    Rg=R_g(Mm)
+    g1=Gamma(T1,Mm)
+    a1=(g1*Rg*T1)**0.5
+    u1=M1*a1
+    rho1=p1/(Rg*T1)
+    w1=u1*np.cos(beta1)
+    
+    #Velocidad Normal
+    u1n=u1*np.sin(beta1)
+    M1n=u1n/a1
+    
+    #Temperatura remanso
+    func_ht = lambda Tt : -u1**2+2*cp_TtT(T1, Tt,Mm)
+    Tt_initial_guess = (1+M1n**2*(g1-1)*0.5)*T1
+    Tt_s=fsolve(func_ht, Tt_initial_guess)
+    
+    #Resolución T2
+    func_T2= lambda T2 :  -Rg*T1/u1n-u1n+Rg*T2/(2*cp_TtT(T2,Tt_s,Mm)-w1**2)**0.5+(2*cp_TtT(T2,Tt_s,Mm)-w1**2)**0.5
+    T2_initial_guess = (1+M1n**2*(g1-1)*0.5)*T1*0.9
+    T2_s=fsolve(func_T2, T2_initial_guess)
+    
+    u2n=(2*cp_TtT(T2_s, Tt_s,Mm)-w1**2)**0.5
+    u2=(u2n**2+w1**2)**0.5
+    
+    Theta_2rad=beta-np.arcsin(u2n/u2)
+    Theta_2deg_beta1=np.rad2deg(Theta_2rad)
+    
+    g2=Gamma(T2_s,Mm)
+    a2=(g2*Rg*T2_s)**0.5
+    M2=u2/a2
+    M2n=u2n/a2
+    
+    #Saltos
+    T21=T2_s/T1
+    u21n=u2n/u1n
+    rho21=1/u21n
+    p2=T2_s*Rg*rho1*rho21
+    p21=p2/p1
+
+    return p21, Theta_2deg_beta1, M2
 
 #Onda incidente
 beta_in = []
@@ -100,6 +143,9 @@ for beta in np.arange(np.arcsin(1/M1),beta1, 0.01):
     beta_in = np.append(beta_in,np.rad2deg(beta))
     p21_s= np.append(p21_s,p21)
     Theta_2deg_s= np.append(Theta_2deg_s,Theta_2deg)
+p21_beta1, Theta_2deg_beta1, M2 = funPoint2(T1,M1, beta1)
+
+print(M2,p21_beta1,Theta_2deg_beta1)
 
 #Plot
 plt.plot(Theta_2deg_s,p21_s, color='black')
